@@ -23,5 +23,5 @@ public static class Workers
         new Worker("Judith", Currencies.Usd.Of(89).PerHour()),
         new Worker("Jay", Currencies.Usd.Of(44).PerHour()),
         new Worker("Jamie", Currencies.Usd.Of(68).PerHour())
-    }.Once(); // <-- This is the only change
+    }.Once(); 
 }
