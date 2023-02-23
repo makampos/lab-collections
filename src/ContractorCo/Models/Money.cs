@@ -14,7 +14,7 @@ public record Money
         this.Currency = currency;
     }
 
-    public decimal Amount 
+    public decimal Amount
     {
         get => this._amount;
         init => this._amount = value.NonNegative(nameof(Amount));
@@ -33,10 +33,23 @@ public record Money
     public Money Divide(decimal factor) =>
         this with { Amount = this.Amount / factor.NonZero(nameof(factor)) };
 
-    public override string ToString() => 
+    public Money Multiply(decimal factor) =>
+        this with { Amount = this.Amount * factor };
+
+    public Money Add(Money other) =>
+        this.Currency.Equals(other.Currency)
+            ? this with { Amount = Amount + other.Amount }
+            : throw new ArgumentException($"Cannot add disparate currencies {this.Currency} and {other.Currency}");
+
+    public override string ToString() =>
         $"{this.Amount.ToString(this.AmountFormat)} {this.Currency}";
 
-    private string AmountFormat => 
-        "#,##0" + 
+    public int CompareTo(Money? other) =>
+        other is null ? 1
+        : this.Currency.Equals(other.Currency) ? this.Amount.CompareTo(other.Amount)
+        : throw new ArgumentException($"Cannot compare disparate currencies {this.Currency} and {other.Currency}");
+
+    private string AmountFormat =>
+        "#,##0" +
         (this.Precision > 0 ? "." + new string('0', this.Precision) : string.Empty);
 }
