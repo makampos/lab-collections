@@ -20,6 +20,11 @@ public record PayRate
         init => this._duration = value.NonZero(nameof(Duration));
     }
 
+    public int CompareTo(PayRate? other) =>
+        other is null
+            ? 1
+            : this.In(TimeSpan.FromHours(1)).CompareTo(other.In(TimeSpan.FromHours(1)));
+
     public Money In(TimeSpan duration) =>
         duration == TimeSpan.Zero ? this.Pay with { Amount = 0 }
             : this.Pay.Divide(this.Ratio(duration));
