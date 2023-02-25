@@ -24,7 +24,7 @@ try
     #region Pagination
 
     IPaginated<Worker> pages =
-        Workers.TestData.Paginate(Worker.RateComparer, 5);
+        Workers.TestData.Replicate(50_000, .05F).Paginate(Worker.RateComparer, 112_000);
 
     Stopwatch pageTimer = Stopwatch.StartNew();
     IEnumerator<IPage<Worker>> enumerator = pages.GetEnumerator();
@@ -35,6 +35,7 @@ try
         PayRate rate = page.AveragePayRate();
         WriteLine($"Page #{page.Ordinal}: {page.Count}x{rate} [{pageTimer.Elapsed}]");
         pageTimer.Restart();
+        break;
     }
 
     #endregion

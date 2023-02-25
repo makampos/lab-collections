@@ -26,7 +26,7 @@ public class ProjectingPage<T> : IPage<T>
     IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
     
     private int Offset => (this.Ordinal - 1) * this.PageSize;
-    private int EndOffset => Math.Min(this.Offset + this.PageSize, this.Count);
+    private int EndOffset => Math.Min(this.Offset + this.PageSize, this.Items.Count);
     public int Count  => Math.Max(this.EndOffset - this.Offset, 0);
 
 
