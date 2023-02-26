@@ -23,5 +23,24 @@ public static class Workers
         new Worker("Judith", Currencies.Usd.Of(89).PerHour()),
         new Worker("Jay", Currencies.Usd.Of(44).PerHour()),
         new Worker("Jamie", Currencies.Usd.Of(68).PerHour())
-    }.Once(); 
+    }.Once();
+
+    public static IEnumerable<Worker> GetWorkers() =>
+        GetRawWorkers().Zip(
+            ReplicatingOperators.GetRandomValues(1 / .8F, 1.2F),
+            (worker, factor) => worker.ScalePayRate((decimal)factor));
+
+    public static IEnumerable<Worker> GetWorkers(int count) =>
+        GetWorkers().Take(count);
+
+    public static IEnumerable<Worker> GetWorkersUniqueRate(int count) =>
+        GetWorkers().DistinctBy(worker => worker.Rate).Take(count);
+
+    private static IEnumerable<Worker> GetRawWorkers()
+    {
+        while (true)
+        {
+            foreach (Worker worker in TestData) yield return worker;
+        }
+    }
 }
