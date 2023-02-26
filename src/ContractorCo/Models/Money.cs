@@ -2,7 +2,7 @@ using Models.Common;
 
 namespace Models;
 
-public record Money
+public record Money : IComparable<Money>
 {
     private decimal _amount;
     private int _precision;
