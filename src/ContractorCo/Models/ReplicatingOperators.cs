@@ -7,7 +7,7 @@ public static class ReplicatingOperators
             .Zip(GetRandomValues(1 / (1 + payRateRange), 1 + payRateRange),
                 (worker, factor) => worker.Replicate(factor));
 
-    private static IEnumerable<float> GetRandomValues(float min, float max)
+    internal static IEnumerable<float> GetRandomValues(float min, float max)
     {
         Random numbersGenerator = new(42);
         float range = max - min;
