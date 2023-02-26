@@ -1,7 +1,7 @@
-﻿using System.Diagnostics;
+﻿using Console;
 using Models;
+using Models.Collections;
 using Models.Common;
-using Models.Common.Pagination;
 using static System.Console;
 
 try
@@ -23,20 +23,29 @@ try
 
     #region Pagination
 
-    IPaginated<Worker> pages =
-        Workers.TestData.Replicate(50_000, .05F).Paginate(Worker.RateComparer, 112_000);
+    // IPaginated<Worker> pages =
+    //     Workers.TestData.Replicate(50_000, .05F).Paginate(Worker.RateComparer, 112_000);
+    //
+    // Stopwatch pageTimer = Stopwatch.StartNew();
+    // IEnumerator<IPage<Worker>> enumerator = pages.GetEnumerator();
+    //
+    // while (enumerator.MoveNext())
+    // {
+    //     IPage<Worker> page = enumerator.Current;
+    //     PayRate rate = page.AveragePayRate();
+    //     WriteLine($"Page #{page.Ordinal}: {page.Count}x{rate} [{pageTimer.Elapsed}]");
+    //     pageTimer.Restart();
+    //     break;
+    // }
 
-    Stopwatch pageTimer = Stopwatch.StartNew();
-    IEnumerator<IPage<Worker>> enumerator = pages.GetEnumerator();
+    #endregion
 
-    while (enumerator.MoveNext())
-    {
-        IPage<Worker> page = enumerator.Current;
-        PayRate rate = page.AveragePayRate();
-        WriteLine($"Page #{page.Ordinal}: {page.Count}x{rate} [{pageTimer.Elapsed}]");
-        pageTimer.Restart();
-        break;
-    }
+    #region Generics
+
+    Workers.GetWorkers(40)
+        .ToFullySortedList(worker => worker.HourlyRate)
+        .ToGrid(120, 2)
+        .WriteLines();
 
     #endregion
 }
